@@ -1,2 +1,11 @@
-npm init -y
-npm install electron --save-dev
+{
+  "name": "ugphone-multi-dashboard",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^28.0.0"
+  }
+}
