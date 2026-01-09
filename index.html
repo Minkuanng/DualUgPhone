@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>UgPhone Multi-Account Manager</title>
+    <style>
+        * { box-sizing: border-box; }
+        html, body { 
+            margin: 0; padding: 0; width: 100vw; height: 100vh; 
+            background: #000; overflow: hidden; font-family: 'Segoe UI', sans-serif;
+        }
+
+        .container { 
+            display: grid; grid-template-columns: 50% 50%; grid-template-rows: 50% 50%; 
+            width: 100vw; height: 100vh;
+        }
+
+        .panel { 
+            display: flex; flex-direction: column; border: 1px solid #222; 
+            background: #111; position: relative; overflow: hidden;
+        }
+
+        .nav-bar { 
+            display: flex; width: 100%; background: #1a1a1a; 
+            padding: 4px 8px; gap: 6px; align-items: center; height: 38px;
+            border-bottom: 2px solid #333;
+        }
+        .tab-id-tag {
+            padding: 2px 6px; border-radius: 3px; font-size: 10px; font-weight: bold;
+            color: #000;
+        }
+        .tag-1 { background: #ff4d4d; } .tag-2 { background: #4dff4d; }
+        .tag-3 { background: #4da6ff; } .tag-4 { background: #ffff4d; }
+
+        .tab-title { color: #888; font-size: 11px; flex: 1; margin-left: 5px; }
+
+        .btn { 
+            border: none; height: 26px; padding: 0 10px; border-radius: 4px; 
+            cursor: pointer; color: white; font-size: 10px; font-weight: bold;
+        }
+        .btn-go { background: #238636; }
+        .btn-stop { background: #da3633; }
+        .btn-tool { background: #333; }
+        .btn-tool:hover { background: #444; }
+
+        .viewport {
+            flex: 1; display: flex; justify-content: center; align-items: center;
+            background: #000; position: relative;
+        }
+        .mobile-screen {
+            width: 360px; height: 740px; background: #222;
+            position: absolute; transform-origin: center center;
+            border-radius: 1px; border: 0px solid #333; overflow: hidden;
+        }
+        
+        /* Webview thay thế iframe */
+        webview { 
+            width: 100%; height: 100%; border: none; background: #fff;
+            display: inline-flex;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="panel" id="panel-1">
+        <div class="nav-bar">
+            <span class="tab-id-tag tag-1">ID: 1</span>
+            <span class="tab-title">ACC_1 (Partition: persist:acc1)</span>
+            <button class="btn btn-tool" onclick="reloadTab(1)">↻ R</button>
+            <button class="btn btn-tool" onclick="goHome(1)">🏠 H</button>
+            <button class="btn btn-go" id="btn-1" onclick="toggleTab(1)">LOGIN / ON</button>
+            <button class="btn btn-tool" onclick="toggleMaximize(1)">⛶</button>
+        </div>
+        <div class="viewport" id="vp-1">
+            <div class="mobile-screen" id="sc-1">
+                <webview id="fr-1" src="about:blank" partition="persist:acc1" useragent="Mozilla/5.0 (Linux; Android 10; SM-G981B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.162 Mobile Safari/537.36"></webview>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel" id="panel-2">
+        <div class="nav-bar">
+            <span class="tab-id-tag tag-2">ID: 2</span>
+            <span class="tab-title">ACC_2 (Partition: persist:acc2)</span>
+            <button class="btn btn-tool" onclick="reloadTab(2)">↻ R</button>
+            <button class="btn btn-tool" onclick="goHome(2)">🏠 H</button>
+            <button class="btn btn-go" id="btn-2" onclick="toggleTab(2)">LOGIN / ON</button>
+            <button class="btn btn-tool" onclick="toggleMaximize(2)">⛶</button>
+        </div>
+        <div class="viewport" id="vp-2">
+            <div class="mobile-screen" id="sc-2">
+                <webview id="fr-2" src="about:blank" partition="persist:acc2" useragent="Mozilla/5.0 (Linux; Android 10; SM-G981B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.162 Mobile Safari/537.36"></webview>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel" id="panel-3">
+        <div class="nav-bar">
+            <span class="tab-id-tag tag-3">ID: 3</span>
+            <span class="tab-title">ACC_3 (Partition: persist:acc3)</span>
+            <button class="btn btn-tool" onclick="reloadTab(3)">↻ R</button>
+            <button class="btn btn-tool" onclick="goHome(3)">🏠 H</button>
+            <button class="btn btn-go" id="btn-3" onclick="toggleTab(3)">LOGIN / ON</button>
+            <button class="btn btn-tool" onclick="toggleMaximize(3)">⛶</button>
+        </div>
+        <div class="viewport" id="vp-3">
+            <div class="mobile-screen" id="sc-3">
+                <webview id="fr-3" src="about:blank" partition="persist:acc3" useragent="Mozilla/5.0 (Linux; Android 10; SM-G981B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.162 Mobile Safari/537.36"></webview>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel" id="panel-4">
+        <div class="nav-bar">
+            <span class="tab-id-tag tag-4">ID: 4</span>
+            <span class="tab-title">ACC_4 (Partition: persist:acc4)</span>
+            <button class="btn btn-tool" onclick="reloadTab(4)">↻ R</button>
+            <button class="btn btn-tool" onclick="goHome(4)">🏠 H</button>
+            <button class="btn btn-go" id="btn-4" onclick="toggleTab(4)">LOGIN / ON</button>
+            <button class="btn btn-tool" onclick="toggleMaximize(4)">⛶</button>
+        </div>
+        <div class="viewport" id="vp-4">
+            <div class="mobile-screen" id="sc-4">
+                <webview id="fr-4" src="about:blank" partition="persist:acc4" useragent="Mozilla/5.0 (Linux; Android 10; SM-G981B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.162 Mobile Safari/537.36"></webview>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// URL mặc định khi mở
+const UG_URL = "https://www.ugphone.com/toc-portal/#/dashboard/index";
+
+const tabManager = {
+    tabs: {
+        1: { isRunning: false, isMaximized: false },
+        2: { isRunning: false, isMaximized: false },
+        3: { isRunning: false, isMaximized: false },
+        4: { isRunning: false, isMaximized: false }
+    },
+    updateStatus(id, status) { if(this.tabs[id]) Object.assign(this.tabs[id], status); },
+    getStatus(id) { return this.tabs[id]; }
+};
+
+// Hàm bật/tắt Tab
+function toggleTab(id) {
+    const btn = document.getElementById(`btn-${id}`);
+    const webview = document.getElementById(`fr-${id}`);
+    const status = tabManager.getStatus(id);
+    
+    if (!status.isRunning) {
+        // Load URL
+        webview.loadURL(UG_URL);
+        btn.innerText = "OFF";
+        btn.className = "btn btn-stop";
+        tabManager.updateStatus(id, { isRunning: true });
+    } else {
+        // Tắt về màn hình trắng
+        webview.loadURL("about:blank");
+        btn.innerText = "ON";
+        btn.className = "btn btn-go";
+        tabManager.updateStatus(id, { isRunning: false });
+    }
+}
+
+// Reload lại trang hiện tại
+function reloadTab(id) {
+    const webview = document.getElementById(`fr-${id}`);
+    if (webview.getURL() && !webview.getURL().includes('about:blank')) {
+        webview.reload();
+    }
+}
+
+// Về trang chủ Dashboard
+function goHome(id) {
+    const webview = document.getElementById(`fr-${id}`);
+    webview.loadURL(UG_URL);
+}
+
+// Phóng to/Thu nhỏ (giữ nguyên logic cũ của bạn)
+function toggleMaximize(id) {
+    const panel = document.getElementById(`panel-${id}`);
+    const status = tabManager.getStatus(id);
+    
+    if (!status.isMaximized) {
+        panel.classList.add('maximized');
+        tabManager.updateStatus(id, { isMaximized: true });
+    } else {
+        panel.classList.remove('maximized');
+        tabManager.updateStatus(id, { isMaximized: false });
+    }
+    setTimeout(fixScale, 200);
+}
+
+function fixScale() {
+    for (let i = 1; i <= 4; i++) {
+        const vp = document.getElementById(`vp-${i}`);
+        const sc = document.getElementById(`sc-${i}`);
+        if (vp && sc) {
+            const panel = document.getElementById(`panel-${i}`);
+            const isMaximized = panel.classList.contains('maximized');
+            if (isMaximized) {
+                const scale = Math.min(vp.clientWidth / 400, vp.clientHeight / 800);
+                sc.style.transform = `scale(${scale * 0.9})`;
+            } else {
+                const scale = Math.min(vp.clientWidth / 360, vp.clientHeight / 740) * 0.95;
+                sc.style.transform = `scale(${scale})`;
+            }
+        }
+    }
+}
+
+// Tự động scale khi đổi kích thước cửa sổ
+window.onload = fixScale;
+window.onresize = fixScale;
+
+// Fix lỗi hiển thị webview khi mới load
+setTimeout(fixScale, 1000);
+</script>
+
+<style>
+    .panel.maximized {
+        position: fixed !important; top: 0 !important; left: 0 !important;
+        width: 100vw !important; height: 100vh !important;
+        z-index: 9999 !important; border: 2px solid #555 !important;
+    }
+    .panel.maximized .nav-bar { background: #333 !important; }
+</style>
+</body>
+</html>
